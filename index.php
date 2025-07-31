@@ -149,7 +149,7 @@ $blank_image = current_scheme() . '://' . $_SERVER['HTTP_HOST'] . '/blank.png';
             <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
         <?php endif; ?>
         <form id="genForm">
-            <input id="urlInput" type="url" placeholder="https://example.com" required value="<?php echo htmlspecialchars($raw_input, ENT_QUOTES, 'UTF-8'); ?>">
+            <input id="urlInput" type="text" inputmode="url" placeholder="example.com" required value="<?php echo htmlspecialchars($raw_input, ENT_QUOTES, 'UTF-8'); ?>">
             <button type="submit">Generate</button>
             <button id="optionsToggle" type="button">Options</button>
             <div id="options">
