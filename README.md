@@ -17,7 +17,7 @@ The script accepts a URL via the query parameter `u` or `url`. It sets minimal O
    ```
 3. Share this generated link. The preview will be blank but clicking it will forward to the original page.
 
-You can also open the site without parameters to use a basic form that generates the link for you. The form includes an **Options** section where you can toggle hiding the title and image preview.
+You can also open the site without parameters to use a basic form that generates the link for you. The form includes an **Options** section where you can toggle hiding the title and image preview. It accepts addresses with or without the `https://` or `http://` prefix.
 
 ## Files
 
