@@ -1,0 +1,30 @@
+# Remove Link Thumbnail — Clean URL rewriting
+# Rename this file to .htaccess and place in the same directory as index.php.
+# Requires mod_rewrite enabled.
+
+RewriteEngine On
+
+# Serve blank.png directly
+RewriteRule ^blank\.png$ blank.png [L]
+
+# Rewrite /example.com to /?u=example.com
+# Rewrite /http/example.com to /?scheme=http&u=example.com
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^http/(.+)$ index.php?scheme=http&u=$1 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)$ index.php?u=$1 [L,QSA]
+
+# Cache static assets
+<FilesMatch "\.(png)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set Referrer-Policy "no-referrer"
+</IfModule>
