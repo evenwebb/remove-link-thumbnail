@@ -1,30 +1,61 @@
-# Remove Link Thumbnail
+# 🔗 Remove Link Thumbnail
 
-This repository provides a simple PHP script that lets you create links with a blank preview. When the generated link is shared on social media or in chat apps that typically show link previews, it will display a transparent thumbnail and the domain name of the original link only. Clicking the previewless link immediately redirects the user to the intended destination.
+A PHP script that creates links with blank previews. When shared on social media, messaging apps, or anywhere that shows link previews, the generated link displays a transparent thumbnail — revealing only the domain. Clicking the link immediately redirects to the intended destination. No tracking, no ads, no JavaScript required for the redirect.
 
-## How It Works
+## ✨ Features
 
-The script accepts a URL via the query parameter `u` or `url`. It sets minimal Open Graph and Twitter Card metadata using a 1×1 pixel transparent image. Most crawlers will then produce a blank preview. A quick meta refresh and JavaScript redirect take visitors to the provided URL.
+- **Blank link previews** — 1×1 transparent RGBA PNG stops Open Graph / Twitter Card scrapers from pulling images or descriptions from the target site
+- **Instant redirect** — JavaScript navigates immediately; a `<noscript>` meta-refresh fallback handles non-JS environments
+- **Clean URL support** — works with clean URLs like `/example.com` via `.htaccess` rewriting (no `?u=` needed)
+- **Security-hardened** — XSS prevention via `json_encode()`, hostname validation, `X-Forwarded-Host` support, content security policy headers
+- **External CSS & JS** — styles and scripts extracted to `style.css` and `script.js` for browser caching
+- **Interactive form** — a built-in generator form with options to toggle title and image visibility
 
-## Usage
+## 🚀 Quick Start
 
-1. Upload `index.php` and `blank.png` to any PHP-enabled web host.
-2. Access the script by appending your target address (without the scheme) to the `u` parameter. If the link uses HTTP instead of HTTPS, also include `s=0`. You can disable hiding of the title or image preview with `t=0` and `i=0`:
+1. Upload `index.php`, `blank.png`, `style.css`, and `script.js` to any PHP-enabled web host.
+2. (Optional) Copy `.htaccess.example` to `.htaccess` for clean URLs.
+3. Access the script with a target URL:
    ```
    https://yourdomain.example/?u=example.com/page
    https://yourdomain.example/?s=0&u=example.com/page              # HTTP link
-   https://yourdomain.example/?t=0&i=0&u=example.com/page          # show title and image
+   https://yourdomain.example/?t=0&i=0&u=example.com/page          # show title and preview
    ```
-3. Share this generated link. The preview will be blank but clicking it will forward to the original page.
+4. Share the generated link. The preview is blank; clicking redirects to the original page.
 
-You can also open the site without parameters to use a basic form that generates the link for you. The form includes an **Options** section where you can toggle hiding the title and image preview. It accepts addresses with or without the `https://` or `http://` prefix.
+With clean URLs enabled:
+```
+https://yourdomain.example/example.com/page
+```
 
-## Files
+## ⚙️ Configuration
 
-- `index.php` – The main PHP script.
-- `blank.png` – 1x1 pixel transparent image used for the preview.
-- `LICENSE` – MIT license information.
+Edit `index.php` to customize:
 
-## License
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `SITE_BASE_URL` | auto-detected | Base URL of your installation (set if auto-detection fails behind proxies) |
+| CSP headers | enabled | Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy |
+
+## 📁 Files
+
+| File | Purpose |
+|------|---------|
+| `index.php` | Main PHP script with form, redirect, and metadata generation |
+| `blank.png` | Programmatically-generated 68-byte 1×1 RGBA transparent PNG |
+| `style.css` | External stylesheet with CSS custom properties for theming |
+| `script.js` | External JavaScript for clipboard copy and redirect logic |
+| `.htaccess.example` | Clean URL rewriting + static asset caching + security headers |
+
+## 🔒 Security
+
+- **XSS prevention**: URL output in JavaScript context uses `json_encode()` instead of `addslashes()`
+- **Host header injection**: Uses `SERVER_NAME` with `X-Forwarded-Host` support instead of `HTTP_HOST`
+- **URL validation**: `parse_url()` with hostname presence check instead of `filter_var(FILTER_VALIDATE_URL)`
+- **Content Security Policy**: Restrictive CSP headers block inline scripts and restrict resource sources
+- **Input length limits**: Query parameters have maximum lengths enforced
+- **Operator precedence fix**: `$_SERVER['REQUEST_URI'] ?? '' === '/blank.png'` correctly parenthesized
+
+## 📄 License
 
 This project is released under the [MIT License](LICENSE).
